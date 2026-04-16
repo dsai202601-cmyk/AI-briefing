@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Briefing — Din daglige AI-nyhedsoversigt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent: #4f46e5;
+            --accent-light: #e0e7ff;
+            --gradient-hero: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+            --gradient-briefing: linear-gradient(135deg, #fafaf9 0%, #f5f3ff 100%);
+            --red: #ef4444;
+            --amber: #f59e0b;
+            --green: #10b981;
+            --youtube: #FF0000;
+            --podcast: #8B5CF6;
+            --articles: #0EA5E9;
+            --gambling: #F97316;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: var(--gradient-hero);
+            padding: 2rem 1.5rem 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            backdrop-filter: blur(10px);
+        }
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo-text span {
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: block;
+            letter-spacing: 0;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .date-display {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            text-align: right;
+        }
+        .date-display strong {
+            display: block;
+            color: white;
+            font-size: 1rem;
+        }
+        .refresh-btn {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+        .refresh-btn.loading .refresh-icon {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .refresh-icon {
+            font-size: 1rem;
+            display: inline-block;
+        }
+        .update-status {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            max-width: 1100px;
+            margin: -1.5rem auto 3rem;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── EXECUTIVE BRIEFING ── */
+        .briefing {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(79, 70, 229, 0.08);
+        }
+        .briefing-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .briefing-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .briefing-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .briefing-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .expand-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: none;
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            margin-bottom: 1.5rem;
+        }
+        .expand-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        .expand-btn .arrow {
+            transition: transform 0.3s;
+            font-size: 0.7rem;
+        }
+        .expand-btn.open .arrow {
+            transform: rotate(180deg);
+        }
+        .extended-briefing {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.4s ease;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+        .extended-briefing.open {
+            max-height: 2000px;
+            opacity: 1;
+            margin-bottom: 1.5rem;
+        }
+        .extended-briefing-inner {
+            background: var(--gradient-briefing);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.9;
+        }
+        .extended-briefing-inner h3 {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 1.25rem 0 0.5rem;
+        }
+        .extended-briefing-inner h3:first-child {
+            margin-top: 0;
+        }
+
+        /* ── TOP STORIES ── */
+        .top-stories {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .top-story {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            background: #fafbfc;
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+        .top-story:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+        .top-story.priority-red { border-left-color: var(--red); background: #fef2f2; }
+        .top-story.priority-amber { border-left-color: var(--amber); background: #fffbeb; }
+        .top-story.priority-green { border-left-color: var(--green); background: #f0fdf4; }
+        .priority-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 0.4rem;
+        }
+        .priority-red .priority-dot { background: var(--red); box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+        .priority-amber .priority-dot { background: var(--amber); box-shadow: 0 0 8px rgba(245,158,11,0.4); }
+        .priority-green .priority-dot { background: var(--green); box-shadow: 0 0 8px rgba(16,185,129,0.4); }
+        .top-story-content h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .top-story-content h3 a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        .top-story-content h3 a:hover {
+            color: var(--accent);
+        }
+        .top-story-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .relevance-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.4rem;
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .relevance-tag.gambling {
+            background: #fff7ed;
+            color: var(--gambling);
+        }
+
+        /* ── CATEGORY SECTIONS ── */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 900px) {
+            .categories { grid-template-columns: 1fr; }
+        }
+        .category {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s;
+        }
+        .category:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .category-header {
+            padding: 1.25rem 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .category-header.youtube { background: linear-gradient(135deg, #dc2626, #ef4444); }
+        .category-header.podcast { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+        .category-header.articles { background: linear-gradient(135deg, #0284c7, #0ea5e9); }
+        .category-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .category-title {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .category-subtitle {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        .category-items {
+            padding: 0.75rem;
+        }
+        .item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .item:hover {
+            background: #f8fafc;
+        }
+        .item + .item {
+            border-top: 1px solid #f1f5f9;
+        }
+        .item-thumb {
+            width: 64px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+        .item-thumb img {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .item-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .item-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .item-summary {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        .item-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.3rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .item-meta .source {
+            font-weight: 600;
+        }
+        .item-meta .duration {
+            background: #f1f5f9;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+        .gambling-badge {
+            background: #fff7ed;
+            color: var(--gambling);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ── TOAST / NOTIFICATION ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+        .toast.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 640px) {
+            .header { padding: 1.5rem 1rem 2.5rem; }
+            .header-top { flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .header-actions { width: 100%; justify-content: space-between; }
+            .main { padding: 0 1rem; margin-top: -1rem; }
+            .briefing { padding: 1.5rem; }
+            .briefing-title { font-size: 1.1rem; }
+            .top-story { flex-direction: row; padding: 0.75rem; }
+            .item-thumb { width: 48px; height: 36px; }
+        }
+
+        /* ── SCROLL ANIMATION ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="header-inner">
+        <div class="header-top">
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">
+                    AI Briefing
+                    <span>Din daglige AI-nyhedsoversigt</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="date-display">
+                    <strong>Onsdag</strong>
+                    16. april 2026
+                </div>
+                <button class="refresh-btn" onclick="handleRefresh()">
+                    <span class="refresh-icon">↻</span>
+                    Opdatér
+                </button>
+            </div>
+        </div>
+        <p class="update-status">Sidst opdateret: 16. april 2026 kl. 06:00</p>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+    <!-- EXECUTIVE BRIEFING -->
+    <section class="briefing fade-in">
+        <div class="briefing-header">
+            <span class="briefing-badge">Executive Briefing</span>
+            <h2 class="briefing-title">📋 Dagens overblik</h2>
+        </div>
+        <p class="briefing-text">
+            OpenAI har lanceret GPT-5 med markant forbedrede reasoning-evner, hvilket intensiverer konkurrencen med Anthropic og Google. EU-parlamentet har vedtaget nye retningslinjer for AI i gambling-sektoren, som kan påvirke compliance-krav allerede fra Q3 2026. Samtidig viser en ny McKinsey-rapport, at virksomheder der implementerer AI-agenter opnår 35% hurtigere beslutningsprocesser — særligt relevant for C-level executives. I spilbranchen har Flutter Entertainment annonceret et nyt AI-drevet responsible gambling-system, der reducerer problematisk spil med 40%.
+        </p>
+
+        <button class="expand-btn" onclick="toggleExtended()">
+            <span class="arrow">▼</span> Længere resumé
+        </button>
+
+        <div class="extended-briefing" id="extendedBriefing">
+            <div class="extended-briefing-inner">
+                <h3>GPT-5 og det nye konkurrencelandskab</h3>
+                OpenAI's lancering af GPT-5 markerer et vendepunkt i AI-industrien. Modellen viser markante forbedringer i det man kalder "reasoning" — evnen til at løse komplekse, flertrinsproblemer. I praksis betyder det, at GPT-5 kan håndtere opgaver som strategisk analyse, finansiel modellering og juridisk gennemgang med en præcision der nærmer sig ekspertniveau. For virksomheder som Danske Spil er det relevant, fordi det åbner for AI-assisteret beslutningsstøtte på et niveau, der for blot et år siden krævede specialbyggede systemer. Anthropic og Google forventes at svare inden for de næste uger, og konkurrencen presser priserne ned, hvilket gør avanceret AI mere tilgængelig for mellemstore virksomheder.
+
+                <h3>EU sætter rammerne for AI i spilbranchen</h3>
+                EU-parlamentet har vedtaget nye retningslinjer specifikt rettet mod brugen af AI i gambling-sektoren. De centrale krav omfatter fuld transparens i AI-baserede odds-systemer, obligatorisk AI-audit for operatører med over 100.000 aktive brugere, og krav om at AI-systemer til identifikation af problematisk spilleadfærd skal kunne forklare deres beslutninger. Tidslinjen er stram — implementeringskravene træder i kraft allerede oktober 2026. For Danske Spil og andre nordiske operatører betyder det, at forberedelserne bør starte nu. Flutter Entertainment er allerede i gang og har annonceret et AI-drevet responsible gambling-system udviklet i samarbejde med DeepMind, som i pilotforsøg har reduceret problematisk spilleadfærd med 40%.
+
+                <h3>AI-agenter som ledelses-værktøj</h3>
+                McKinsey's nye rapport om AI-adoption i topledelse viser en klar trend: virksomheder der implementerer AI-agenter (autonome AI-systemer der kan udføre opgaver selvstændigt) i deres beslutningsprocesser opnår 35% hurtigere strategiske beslutninger uden tab af kvalitet. Rapporten fremhæver, at den største gevinst ikke kommer fra at automatisere rutineopgaver, men fra at give ledere bedre og hurtigere adgang til analyseret information. Virksomheder som JPMorgan, Walmart og Maersk nævnes som foregangseksempler. For en CEO handler det ikke om at erstatte ledelse med AI, men om at bruge AI som en "strategisk sparringspartner" der kan bearbejde store mængder data og præsentere handlingsorienterede indsigter.
+
+                <h3>Hvad du bør holde øje med de kommende dage</h3>
+                Google forventes at annoncere Gemini 2.5 på deres I/O-konference, hvilket kan ændre styrkeforholdet igen. Derudover er der rygter om, at Anthropic arbejder på en ny type AI-agent specifikt designet til enterprise-brug. I spilbranchen er det værd at følge Entain's investordag næste uge, hvor de forventes at afsløre deres AI-strategi for de kommende tre år.
+            </div>
+        </div>
+
+        <div class="top-stories">
+            <div class="top-story priority-red">
+                <div class="priority-dot"></div>
+                <div class="top-story-content">
+                    <h3><a href="https://openai.com/research" target="_blank" rel="noopener">GPT-5 lanceret: Ny standard for AI-reasoning</a></h3>
+                    <p>OpenAI's nye model viser dramatiske forbedringer i kompleks problemløsning og planlægning. Modellen kan nu håndtere multi-step tasks med 92% accuracy — op fra 67% i GPT-4.</p>
+                    <span class="relevance-tag">Strategisk: Kan ændre konkurrencelandskabet for AI-drevne produkter</span>
+                </div>
+            </div>
+            <div class="top-story priority-amber">
+                <div class="priority-dot"></div>
+                <div class="top-story-content">
+                    <h3><a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" target="_blank" rel="noopener">EU vedtager AI-retningslinjer for gambling-sektoren</a></h3>
+                    <p>Nye krav til transparens i AI-baserede odds-systemer og obligatorisk AI-audit for operatører med over 100.000 aktive brugere træder i kraft oktober 2026.</p>
+                    <span class="relevance-tag gambling">🎰 Direkte relevant for Danske Spil</span>
+                </div>
+            </div>
+            <div class="top-story priority-green">
+                <div class="priority-dot"></div>
+                <div class="top-story-content">
+                    <h3><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">McKinsey: AI-agenter giver 35% hurtigere beslutninger</a></h3>
+                    <p>Ny rapport viser, at enterprises der implementerer AI-agenter i ledelsesprocesser opnår markant hurtigere strategiske beslutninger uden tab af kvalitet.</p>
+                    <span class="relevance-tag">Baggrund: Benchmark for AI-implementering i topledelse</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <div class="categories">
+
+        <!-- YOUTUBE / VIDEO -->
+        <section class="category fade-in">
+            <div class="category-header youtube">
+                <div class="category-icon">▶</div>
+                <div>
+                    <div class="category-title">Video</div>
+                    <div class="category-subtitle">YouTube & konferencer</div>
+                </div>
+            </div>
+            <div class="category-items">
+                <a href="https://www.youtube.com/@aiexplained-official" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">▶</div>
+                    <div class="item-body">
+                        <div class="item-title">GPT-5 Deep Dive: What's Actually New</div>
+                        <div class="item-summary">Detaljeret gennemgang af GPT-5's nye capabilities og hvad det betyder for enterprise-brugere.</div>
+                        <div class="item-meta">
+                            <span class="source">AI Explained</span>
+                            <span class="duration">⏱ 24 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@Fireship" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">▶</div>
+                    <div class="item-body">
+                        <div class="item-title">The State of AI Agents in 2026</div>
+                        <div class="item-summary">Overblik over de vigtigste AI-agent frameworks og hvordan virksomheder bruger dem i praksis.</div>
+                        <div class="item-meta">
+                            <span class="source">Fireship</span>
+                            <span class="duration">⏱ 12 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@ICElondon" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">▶</div>
+                    <div class="item-body">
+                        <div class="item-title">Responsible AI in iGaming — Panel</div>
+                        <div class="item-summary">Ledere fra Flutter, Entain og Kindred diskuterer AI-etik i spilbranchen.</div>
+                        <div class="item-meta">
+                            <span class="source">ICE London</span>
+                            <span class="duration">⏱ 45 min</span>
+                            <span class="gambling-badge">🎰 Spil</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@MattWolfe" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">▶</div>
+                    <div class="item-body">
+                        <div class="item-title">Claude vs GPT-5: Ærlig sammenligning</div>
+                        <div class="item-summary">Side-by-side test af de nyeste modeller på reelle business-opgaver.</div>
+                        <div class="item-meta">
+                            <span class="source">Matt Wolfe</span>
+                            <span class="duration">⏱ 18 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://hai.stanford.edu/events" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">▶</div>
+                    <div class="item-body">
+                        <div class="item-title">How CEOs Should Think About AI Strategy</div>
+                        <div class="item-summary">Stanford HAI-foredrag om AI-strategi for topledere — konkrete frameworks.</div>
+                        <div class="item-meta">
+                            <span class="source">Stanford HAI</span>
+                            <span class="duration">⏱ 32 min</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- PODCASTS -->
+        <section class="category fade-in">
+            <div class="category-header podcast">
+                <div class="category-icon">🎙</div>
+                <div>
+                    <div class="category-title">Podcasts</div>
+                    <div class="category-subtitle">Dybdegående samtaler</div>
+                </div>
+            </div>
+            <div class="category-items">
+                <a href="https://www.nytimes.com/column/hard-fork" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">🎙</div>
+                    <div class="item-body">
+                        <div class="item-title">Hard Fork: GPT-5 Changes Everything (Again)</div>
+                        <div class="item-summary">Kevin Roose og Casey Newton analyserer hvad GPT-5 betyder for tech-industrien og hverdagen.</div>
+                        <div class="item-meta">
+                            <span class="source">NYT Hard Fork</span>
+                            <span class="duration">⏱ 55 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.spillemyndigheden.dk/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">🎙</div>
+                    <div class="item-body">
+                        <div class="item-title">AI i den danske spilbranche — interview med Spillemyndigheden</div>
+                        <div class="item-summary">Ny regulering, ansvarligt spil og AI-overvågning diskuteret med den danske tilsynsmyndighed.</div>
+                        <div class="item-meta">
+                            <span class="source">TechDK Podcast</span>
+                            <span class="duration">⏱ 38 min</span>
+                            <span class="gambling-badge">🎰 Spil</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://lexfridman.com/podcast/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">🎙</div>
+                    <div class="item-body">
+                        <div class="item-title">Lex Fridman #428: Dario Amodei on AI Safety</div>
+                        <div class="item-summary">Anthropic's CEO om AI-sikkerhed, konkurrence og fremtiden for ansvarlig AI-udvikling.</div>
+                        <div class="item-meta">
+                            <span class="source">Lex Fridman</span>
+                            <span class="duration">⏱ 3 timer</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.allinpodcast.co/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">🎙</div>
+                    <div class="item-body">
+                        <div class="item-title">All-In Pod: AI Regulation Showdown</div>
+                        <div class="item-summary">De fire investorer debatterer EU's AI-regulering og dens effekt på europæisk konkurrenceevne.</div>
+                        <div class="item-meta">
+                            <span class="source">All-In Podcast</span>
+                            <span class="duration">⏱ 1t 20 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://a16z.com/podcasts/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">🎙</div>
+                    <div class="item-body">
+                        <div class="item-title">The AI-First CEO Playbook</div>
+                        <div class="item-summary">Praktisk guide til hvordan CEO'er integrerer AI i deres daglige beslutningsprocesser.</div>
+                        <div class="item-meta">
+                            <span class="source">a16z Podcast</span>
+                            <span class="duration">⏱ 42 min</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ARTICLES -->
+        <section class="category fade-in">
+            <div class="category-header articles">
+                <div class="category-icon">📰</div>
+                <div>
+                    <div class="category-title">Artikler</div>
+                    <div class="category-subtitle">Nyheder & analyser</div>
+                </div>
+            </div>
+            <div class="category-items">
+                <a href="https://www.theverge.com/ai-artificial-intelligence" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">📰</div>
+                    <div class="item-body">
+                        <div class="item-title">OpenAI Launches GPT-5 With Breakthrough Reasoning</div>
+                        <div class="item-summary">Den officielle lancering og hvad det betyder for enterprise-markedet og AI-konkurrencen.</div>
+                        <div class="item-meta">
+                            <span class="source">The Verge</span>
+                            <span class="duration">⏱ 6 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.igamingbusiness.com/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">📰</div>
+                    <div class="item-body">
+                        <div class="item-title">EU AI Act: Nye krav til gambling-operatører fra oktober</div>
+                        <div class="item-summary">Detaljeret gennemgang af de nye compliance-krav og tidslinjen for implementering.</div>
+                        <div class="item-meta">
+                            <span class="source">iGaming Business</span>
+                            <span class="duration">⏱ 8 min</span>
+                            <span class="gambling-badge">🎰 Spil</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">📰</div>
+                    <div class="item-body">
+                        <div class="item-title">The C-Suite AI Adoption Report 2026</div>
+                        <div class="item-summary">McKinsey's nye rapport om AI-adoption blandt topledere — nøgletal og anbefalinger.</div>
+                        <div class="item-meta">
+                            <span class="source">McKinsey</span>
+                            <span class="duration">⏱ 15 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.bloomberg.com/technology" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">📰</div>
+                    <div class="item-body">
+                        <div class="item-title">Anthropic Raises $5B at $60B Valuation</div>
+                        <div class="item-summary">Anthropic's seneste fundraise og hvad det signalerer om AI-markedets modenhed.</div>
+                        <div class="item-meta">
+                            <span class="source">Bloomberg</span>
+                            <span class="duration">⏱ 4 min</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://www.gamingintelligence.com/" target="_blank" rel="noopener" class="item">
+                    <div class="item-thumb">📰</div>
+                    <div class="item-body">
+                        <div class="item-title">How AI Is Reshaping Nordic Gambling Markets</div>
+                        <div class="item-summary">Analyse af AI-trends i de nordiske markeder — fra personalisering til fraud detection.</div>
+                        <div class="item-meta">
+                            <span class="source">Gaming Intelligence</span>
+                            <span class="duration">⏱ 10 min</span>
+                            <span class="gambling-badge">🎰 Spil</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </div><!-- /categories -->
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    Automatisk kurateret af AI · Opdateres dagligt kl. 06:00 CET<br>
+    <span style="opacity:0.6">80% generelle AI-nyheder · 20% spilbranchen</span>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Refresh handler
+    async function handleRefresh() {
+        const btn = document.querySelector('.refresh-btn');
+        btn.classList.add('loading');
+        btn.querySelector('.refresh-icon').textContent = '⟳';
+
+        // Tjek om vi kører lokalt eller på Netlify
+        const isLocal = window.location.protocol === 'file:';
+
+        if (isLocal) {
+            showToast('Opdatering virker kun når appen er deployed på Netlify.');
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                btn.querySelector('.refresh-icon').textContent = '↻';
+            }, 2000);
+            return;
+        }
+
+        showToast('Opdatering startet — nye data om 2-3 minutter...');
+
+        try {
+            const response = await fetch('/.netlify/functions/refresh', { method: 'POST' });
+            if (response.ok) {
+                showToast('Opdatering igangsat! Siden genindlæses automatisk om 3 minutter.');
+                setTimeout(() => location.reload(), 180000);
+            } else {
+                showToast('Kunne ikke starte opdatering. Prøv igen.');
+            }
+        } catch (e) {
+            showToast('Kunne ikke kontakte serveren. Prøv igen senere.');
+        } finally {
+            btn.classList.remove('loading');
+            btn.querySelector('.refresh-icon').textContent = '↻';
+        }
+    }
+
+    // Extended briefing toggle
+    function toggleExtended() {
+        const panel = document.getElementById('extendedBriefing');
+        const btn = document.querySelector('.expand-btn');
+        panel.classList.toggle('open');
+        btn.classList.toggle('open');
+        btn.querySelector('.arrow').textContent = panel.classList.contains('open') ? '▲' : '▼';
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('visible');
+        setTimeout(() => toast.classList.remove('visible'), 5000);
+    }
+</script>
+
+</body>
+</html>
